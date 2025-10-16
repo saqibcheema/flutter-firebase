@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+import 'Screens/home_screen.dart';
 import 'Screens/login_screen.dart';
 import 'firebase_options.dart';
 
@@ -19,7 +20,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const LoginScreen(),
+      debugShowCheckedModeBanner: false,
+      routes: {
+        '/' : (context) => LoginScreen(),
+        '/home' : (context) => HomeScreen(),
+      },
+      initialRoute: '/',
     );
   }
 }
