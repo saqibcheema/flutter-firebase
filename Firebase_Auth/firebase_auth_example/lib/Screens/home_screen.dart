@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -8,10 +7,11 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home Screen"),
+        title: Text('Home Screen'),
+        backgroundColor: Colors.teal,
       ),
       body: Center(
-        child: Text('Welcome to home screen'),
+        child: Text('Home Screen'),
       ),
     );
   }

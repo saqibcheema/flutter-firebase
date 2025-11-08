@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "423877510683",
-    "project_id": "flutter-firebase-codelab-c56a3",
-    "storage_bucket": "flutter-firebase-codelab-c56a3.firebasestorage.app"
+    "project_number": "926759717295",
+    "project_id": "flutterauth-c90c6",
+    "storage_bucket": "flutterauth-c90c6.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:423877510683:android:69aa552b7f636018ac1abe",
+        "mobilesdk_app_id": "1:926759717295:android:b0f43439722a7a07ce875a",
         "android_client_info": {
           "package_name": "com.example.firebase_auth"
         }
@@ -15,26 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBYGv3xLBgVWOpWcZx-3HnViN6L--nXUNQ"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:423877510683:android:8ab6c129cb5d95cdac1abe",
-        "android_client_info": {
-          "package_name": "com.example.gtk_flutter"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBYGv3xLBgVWOpWcZx-3HnViN6L--nXUNQ"
+          "current_key": "AIzaSyBoqYVdgZQf7YDRLfT42fPMmGuOCsKOPEk"
         }
       ],
       "services": {
