@@ -43,3 +43,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Ignore Firebase configuration so it does not appear on GitHub
+lib/firebase_options.dart
