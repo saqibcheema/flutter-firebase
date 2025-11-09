@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../Utils/routes.dart';
 import '../Utils/utils.dart';
 import '../widgets/login_signup_button.dart';
 
@@ -47,7 +48,9 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home Screen"),
+        backgroundColor: Colors.teal,
+        title: Text("SignUp Screen"),
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
@@ -105,7 +108,16 @@ class _SignInScreenState extends State<SignInScreen> {
                 if(_formKey.currentState!.validate()){
                   signIn();
                 }
-              },)
+              },),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Already have an account?'),
+                  TextButton(onPressed: (){
+                    Navigator.pushNamed(context, Routes.login);
+                  }, child: Text('SignIn'))
+                ],
+              )
             ],
           ),
         ),

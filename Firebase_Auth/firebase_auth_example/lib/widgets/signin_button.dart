@@ -1,0 +1,27 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+
+class SignInButton extends StatelessWidget {
+  const SignInButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(20.0),
+      child: InkWell(
+        onTap: (){
+
+        },
+        child: Container(
+          height: 60,
+          width: 300,
+          decoration: BoxDecoration(
+            color: Colors.teal,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Center(child: Text('SignIn with Google',style: TextStyle(color: Colors.white,fontSize: 20),)),
+        ),
+      ),
+    );
+  }
+}
