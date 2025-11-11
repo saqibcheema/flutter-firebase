@@ -1,4 +1,3 @@
-// Top-level build file for Kotlin DSL (used by Flutter projects)
 
 buildscript {
     repositories {

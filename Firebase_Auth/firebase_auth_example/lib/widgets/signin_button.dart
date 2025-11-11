@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../logic/google_signin.dart';
+
 class SignInButton extends StatelessWidget {
   const SignInButton({super.key});
 
@@ -10,7 +12,7 @@ class SignInButton extends StatelessWidget {
       padding: EdgeInsets.all(20.0),
       child: InkWell(
         onTap: (){
-
+          GoogleSignInHelper().signIn();
         },
         child: Container(
           height: 60,
