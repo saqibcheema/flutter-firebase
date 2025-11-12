@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth_example/Utils/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../logic/google_signin.dart';
 
@@ -11,8 +13,10 @@ class SignInButton extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(20.0),
       child: InkWell(
-        onTap: (){
-          GoogleSignInHelper().signIn();
+        onTap: ()async{
+          await GoogleSignInHelper().signIn();
+          if(!context.mounted) return;
+          context.go(Routes.authCheck);
         },
         child: Container(
           height: 60,

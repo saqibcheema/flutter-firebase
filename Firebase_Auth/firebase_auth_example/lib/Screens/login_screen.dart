@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../Utils/routes.dart';
 import '../Utils/utils.dart';
 import '../widgets/signin_button.dart';
@@ -25,81 +26,88 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: Colors.teal,
         automaticallyImplyLeading: false,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SignInButton(),
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  hintText: 'Email',
-                  prefixIcon: Icon(Icons.email),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom,top: 100),
+        child: Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SignInButton(),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    hintText: 'Email',
+                    prefixIcon: Icon(Icons.email),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Enter the Email Address";
+                    }
+                    return null;
+                  },
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Enter the Email Address";
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20),
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  hintText: 'Password',
-                  prefixIcon: Icon(Icons.lock),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
+                SizedBox(height: 20),
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    hintText: 'Password',
+                    prefixIcon: Icon(Icons.lock),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Enter the Email Address";
+                    }
+                    return null;
+                  },
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Enter the Email Address";
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 40),
-              FormButton(
-                title: 'Login',
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    String email = _emailController.text.trim();
-                    String password = _passwordController.text.trim();
-                    FirebaseAuth.instance
-                        .signInWithEmailAndPassword(email: email, password: password)
-                        .then((userCredential) {
-                          Navigator.pushNamed(context, Routes.authCheck);
-                    }).catchError((error) {
-                      // Handle error properly
-                      String message = '';
-                      if (error is FirebaseAuthException) {
-                        message = error.message ?? 'An error occurred';
-                      } else {
-                        message = 'Something went wrong${error.toString()}';
-                      }
-                      Utils().toastMessage(message);
-                    });
-                  }
-                },
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('DO not have an account'),
-                  TextButton(onPressed: (){
-                    Navigator.pushNamed(context, Routes.signIn);
-                  }, child: Text('SignIn'))
-                ],
-              )
-            ],
+                SizedBox(height: 40),
+                FormButton(
+                  title: 'Login',
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      String email = _emailController.text.trim();
+                      String password = _passwordController.text.trim();
+                      FirebaseAuth.instance
+                          .signInWithEmailAndPassword(email: email, password: password)
+                          .then((userCredential) {
+                            if(!context.mounted) return;
+                            context.push(Routes.authCheck);
+
+
+                      }).catchError((error) {
+                        // Handle error properly
+                        String message = '';
+                        if (error is FirebaseAuthException) {
+                          message = error.message ?? 'An error occurred';
+                        } else {
+                          message = 'Something went wrong${error.toString()}';
+                        }
+                        Utils().toastMessage(message);
+                      });
+                    }
+                  },
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('DO not have an account'),
+                    TextButton(onPressed: (){
+                      context.push(Routes.signIn);
+                    }, child: Text('SignIn'))
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

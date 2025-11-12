@@ -17,10 +17,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      routes: Routes.routes,
-      initialRoute: Routes.authCheck,
+      routerConfig: Routes().router,
     );
   }
 }

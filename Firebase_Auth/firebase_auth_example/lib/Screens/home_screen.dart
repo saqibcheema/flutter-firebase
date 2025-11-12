@@ -1,5 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+import '../Utils/routes.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -24,8 +28,28 @@ class HomeScreen extends StatelessWidget {
             child: Text('Email : ${user?.email}'),
           ),
           ElevatedButton(
-              onPressed: (){
+              onPressed: ()async{
+                User? user = FirebaseAuth.instance.currentUser;
+
+                if (user != null) {
+                  // Check if logged in with Google
+                  bool isGoogleUser = user.providerData.any((info) => info.providerId == 'google.com');
+
+                  if (isGoogleUser) {
+                    final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+                    try {
+                      await _googleSignIn.signOut();
+                      await _googleSignIn.disconnect(); // May fail if no cached session
+                    } catch (e) {
+                      print("GoogleSignIn disconnect failed: $e"); // Ignore, continue
+                    }
+                  }
+                }
+
                 FirebaseAuth.instance.signOut();
+                if(!context.mounted) return;
+                context.go(Routes.authCheck);
               },
               child: Text('SignOut')
           )

@@ -1,20 +1,35 @@
 import 'package:firebase_auth_example/Auth/Auth_Check.dart';
-import 'package:flutter/material.dart';
-
-import '../Screens/home_screen.dart';
-import '../Screens/login_screen.dart';
+import 'package:firebase_auth_example/Screens/home_screen.dart';
+import 'package:firebase_auth_example/Screens/login_screen.dart';
+import 'package:go_router/go_router.dart';
 import '../Screens/signIn_screen.dart';
 
-class Routes{
+class Routes {
   static const String signIn = '/';
-  static const String login = '/LogIn';
-  static const String home = '/Home';
-  static const String authCheck = '/AuthCheck';
+  static const String login = '/logIn';
+  static const String home = '/home';
+  static const String authCheck = '/authCheck';
 
-  static Map<String, WidgetBuilder> routes = {
-    signIn: (context) => SignInScreen(),
-    login: (context) => LoginScreen(),
-    home: (context) => HomeScreen(),
-    authCheck : (context) => AuthCheck()
-  };
+  final GoRouter router = GoRouter(
+    routes: [
+      GoRoute(
+          path: Routes.signIn,
+          builder: (context, state) => SignInScreen()
+      ),
+      GoRoute(
+          path: Routes.login,
+          builder: (context, state) => LoginScreen()
+      ),
+      GoRoute(
+          path: Routes.home,
+          builder: (context, state) => HomeScreen()
+      ),
+      GoRoute(
+          path: Routes.authCheck,
+          builder: (context, state) => AuthCheck()
+      ),
+    ],
+  );
 }
+
+

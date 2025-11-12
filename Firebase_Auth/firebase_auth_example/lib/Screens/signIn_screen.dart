@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../Utils/routes.dart';
 import '../Utils/utils.dart';
 import '../widgets/login_signup_button.dart';
@@ -26,7 +27,7 @@ class _SignInScreenState extends State<SignInScreen> {
         email: email,
         password: password
     ).then((onValue){
-      Navigator.pushNamed(context, '/LogIn');
+      context.push(Routes.login);
     }).onError((e,stackTrace){
       final String message;
       if(e is FirebaseAuthException){
@@ -114,7 +115,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 children: [
                   Text('Already have an account?'),
                   TextButton(onPressed: (){
-                    Navigator.pushNamed(context, Routes.login);
+                    context.go(Routes.login);
                   }, child: Text('SignIn'))
                 ],
               )
