@@ -1,12 +1,9 @@
-import 'dart:async'; // Stream k liye zaroori ha
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:firebase_auth_example/core/routes/stream_listenable.dart';
 import 'package:go_router/go_router.dart';
-
-// Ap ki screens k imports (Names wese hi hain jo ap ne diye)
 import 'package:firebase_auth_example/Screens/home_screen.dart';
 import 'package:firebase_auth_example/features/auth/screens/login_screen.dart';
-import '../features/auth/screens/signup_screen.dart'; // Ap ne kaha yehi SignInScreen ha
+import '../../features/auth/screens/signup_screen.dart';
 
 class Routes {
   static const String signIn = '/';       // Ye ap ki SignUp Screen ha (Note: Naming confusing ha pr ma change ni kr ra)
@@ -46,11 +43,11 @@ class Routes {
     routes: [
       GoRoute(
           path: Routes.signIn,
-          builder: (context, state) => const SignInScreen() // Ap ki SignUp logic yahan ha
+          builder: (context, state) => const SignInScreen()
       ),
       GoRoute(
           path: Routes.login,
-          builder: (context, state) => const LoginScreen() // Login logic yahan ha
+          builder: (context, state) => const LoginScreen()
       ),
       GoRoute(
           path: Routes.home,
@@ -58,22 +55,4 @@ class Routes {
       ),
     ],
   );
-}
-
-// --- HELPER CLASS (Isy isi file k neechy rehny dein) ---
-class GoRouterRefreshStream extends ChangeNotifier {
-  GoRouterRefreshStream(Stream<dynamic> stream) {
-    notifyListeners();
-    _subscription = stream.asBroadcastStream().listen(
-          (dynamic _) => notifyListeners(),
-    );
-  }
-
-  late final StreamSubscription<dynamic> _subscription;
-
-  @override
-  void dispose() {
-    _subscription.cancel();
-    super.dispose();
-  }
 }

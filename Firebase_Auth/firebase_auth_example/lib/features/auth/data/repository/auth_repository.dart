@@ -1,24 +1,34 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth_example/core/errors/failures.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../errors/authFailures.dart';
 
 class AuthRepository {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
+  final FirebaseFirestore _fireStore;
 
-  AuthRepository({FirebaseAuth? firebaseAuth, GoogleSignIn? googleSignIn})
+  AuthRepository({FirebaseAuth? firebaseAuth, GoogleSignIn? googleSignIn, FirebaseFirestore? fireStore})
     : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
+        _fireStore = fireStore ?? FirebaseFirestore.instance,
       _googleSignIn = googleSignIn ?? GoogleSignIn();
 
-  Future<void> signUpWithEmailPassword(String email, String password) async {
+  Future<User?> signUpWithEmailPassword(String email, String password) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
+      final result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      return result.user;
     } on FirebaseAuthException catch (e) {
-      print(e);
+      throw AuthFailure.fromCode(e.code);
+    } on SocketException{
+      throw NetworkFailure();
     } catch (e) {
-      print(e);
+      throw ServerFailure();
     }
   }
 
@@ -28,15 +38,15 @@ class AuthRepository {
           .signInWithEmailAndPassword(email: email, password: password);
       return result.user;
     } on FirebaseAuthException catch (e) {
-      print(e);
-      return null;
+      throw AuthFailure.fromCode(e.code);
+    } on SocketException{
+      throw NetworkFailure();
     } catch (e) {
-      print(e);
-      return null;
+      throw ServerFailure();
     }
   }
 
-  Future<UserCredential?> signInWithGoogle() async {
+    Future<User?> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
@@ -51,9 +61,16 @@ class AuthRepository {
         idToken: googleAuth.idToken,
       );
 
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      final UserCredential userCredential =
+          await _firebaseAuth.signInWithCredential(credential);
+      final User? user = userCredential.user;
+      return user;
+    } on FirebaseAuthException catch (e) {
+      throw AuthFailure.fromCode(e.code);
+    } on SocketException{
+      throw NetworkFailure();
     } catch (e) {
-      return null;
+      throw ServerFailure();
     }
   }
 
@@ -66,15 +83,36 @@ class AuthRepository {
           try{
             await _googleSignIn.signOut();
           }catch (e){
-            print("GoogleSignIn disconnect failed: $e");
+            throw ServerFailure();
           }
         }
       }
       await _firebaseAuth.signOut();
-    }catch (e){
-      print(e);
+    }on FirebaseAuthException catch (e) {
+      throw AuthFailure.fromCode(e.code);
+    } on SocketException{
+      throw NetworkFailure();
+    } catch (e) {
+      throw ServerFailure();
     }
   }
 
+  Future<void> saveUserToFireStore(User user,{String? displayName})async{
+    final userDoc = _fireStore.collection("Users").doc(user.uid);
+    
+    final generatedUserName = user.email!.split('@')[0];
+
+    final docSnapShot = await userDoc.get();
+    if(!docSnapShot.exists){
+      await userDoc.set({
+        "uid" : user.uid,
+        "email" : user.email,
+        "displayName" : displayName ?? user.displayName ?? generatedUserName,
+        "searchName" : (displayName ?? user.displayName ?? generatedUserName).toLowerCase(),
+        "createdAt" : FieldValue.serverTimestamp(),
+        "profilePhoto" : user.photoURL ?? "https://placeholder.com/user_avatar.png"
+      });
+    }
+  }
 
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import '../../../Utils/routes.dart';
+import '../../../core/routes/routes.dart';
+import '../../../core/utils/utils.dart';
 import '../logic/auth_bloc.dart';
 import '../logic/auth_events.dart';
 import '../logic/auth_states.dart';
@@ -36,16 +37,9 @@ class _LoginScreenState extends State<LoginScreen> {
       body: BlocConsumer<AuthBloc, AuthStates>(
         listener: (context, state) {
           if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error), backgroundColor: Colors.red),
-            );
+            UiUtils.showError(context, state.error);
           } else if (state is AuthLogInSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Successfully Log In'),
-                backgroundColor: Colors.green,
-              ),
-            );
+            UiUtils.showSuccess(context, 'Successfully Login');
             context.go(Routes.home);
           }
         },
@@ -126,12 +120,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(height: 40),
                         ElevatedButton(
                           onPressed: () {
-                            context.read<AuthBloc>().add(
-                              AuthLogInRequested(
-                                email: _emailController.text.trim(),
-                                password: _passwordController.text.trim(),
-                              ),
-                            );
+                            if(_formKey.currentState!.validate()){
+                              context.read<AuthBloc>().add(
+                                AuthLogInRequested(
+                                  email: _emailController.text.trim(),
+                                  password: _passwordController.text.trim(),
+                                ),
+                              );
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.teal,
@@ -148,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('DO not have an account'),
+                            Text('DO not have an account?'),
                             TextButton(
                               onPressed: () {
                                 context.push(Routes.signIn);

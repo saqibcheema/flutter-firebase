@@ -3,7 +3,8 @@ import 'package:firebase_auth_example/features/auth/logic/auth_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import '../../../Utils/routes.dart';
+import '../../../core/routes/routes.dart';
+import '../../../core/utils/utils.dart';
 import '../logic/auth_bloc.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -36,16 +37,9 @@ class _SignInScreenState extends State<SignInScreen> {
       body: BlocConsumer<AuthBloc, AuthStates>(
         listener: (context, state) {
           if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error), backgroundColor: Colors.red),
-            );
+            UiUtils.showError(context, state.error);
           } else if (state is AuthSignUpSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Successfully Account Created'),
-                backgroundColor: Colors.green,
-              ),
-            );
+            UiUtils.showSuccess(context, "Successfully account created");
             context.go(Routes.login);
           }
         },
@@ -107,12 +101,14 @@ class _SignInScreenState extends State<SignInScreen> {
                       ? CircularProgressIndicator()
                       : ElevatedButton(
                           onPressed: () {
-                            context.read<AuthBloc>().add(
-                              AuthSignUpRequested(
-                                email: _emailController.text.trim(),
-                                password: _passwordController.text.trim(),
-                              ),
-                            );
+                            if(_formKey.currentState!.validate()){
+                              context.read<AuthBloc>().add(
+                                AuthSignUpRequested(
+                                  email: _emailController.text.trim(),
+                                  password: _passwordController.text.trim(),
+                                ),
+                              );
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.teal,
