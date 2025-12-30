@@ -22,7 +22,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
-  final ChatRepository _chatRepo = ChatRepository();
   bool _isSearching = false;
   final String currentUserId = FirebaseAuth.instance.currentUser!.uid;
 

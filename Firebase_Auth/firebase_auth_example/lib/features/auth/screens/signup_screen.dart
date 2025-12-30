@@ -18,6 +18,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool showPassword = false;
 
   @override
   void dispose() {
@@ -53,9 +54,21 @@ class _SignInScreenState extends State<SignInScreen> {
                 children: [
                   TextFormField(
                     controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    obscureText: showPassword,
                     decoration: InputDecoration(
                       hintText: 'Email',
                       prefixIcon: Icon(Icons.email),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            showPassword = !showPassword;
+                          });
+                        },
+                        icon: showPassword
+                            ? Icon(Icons.visibility_off)
+                            : Icon(Icons.visibility),
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -101,7 +114,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       ? CircularProgressIndicator()
                       : ElevatedButton(
                           onPressed: () {
-                            if(_formKey.currentState!.validate()){
+                            if (_formKey.currentState!.validate()) {
                               context.read<AuthBloc>().add(
                                 AuthSignUpRequested(
                                   email: _emailController.text.trim(),

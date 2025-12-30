@@ -18,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool showPassword = false;
 
   @override
   void dispose() {
@@ -63,7 +64,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           padding: EdgeInsets.all(20.0),
                           child: InkWell(
                             onTap: () {
-                              context.read<AuthBloc>().add(AuthGoogleSignInRequested());
+                              context.read<AuthBloc>().add(
+                                AuthGoogleSignInRequested(),
+                              );
                             },
                             child: Container(
                               height: 60,
@@ -103,9 +106,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(height: 20),
                         TextFormField(
                           controller: _passwordController,
+                          keyboardType: TextInputType.emailAddress,
+                          obscureText: showPassword,
                           decoration: InputDecoration(
                             hintText: 'Password',
                             prefixIcon: Icon(Icons.lock),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  showPassword = !showPassword;
+                                });
+                              },
+                              icon: showPassword
+                                  ? Icon(Icons.visibility_off)
+                                  : Icon(Icons.visibility),
+                            ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
@@ -120,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(height: 40),
                         ElevatedButton(
                           onPressed: () {
-                            if(_formKey.currentState!.validate()){
+                            if (_formKey.currentState!.validate()) {
                               context.read<AuthBloc>().add(
                                 AuthLogInRequested(
                                   email: _emailController.text.trim(),
