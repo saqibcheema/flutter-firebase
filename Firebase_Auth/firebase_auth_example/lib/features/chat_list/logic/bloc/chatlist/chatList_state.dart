@@ -9,6 +9,7 @@ class ChatListState extends Equatable{
 
 class ChatListInitial extends ChatListState {}
 class ChatListLoading extends ChatListState {}
+class SearchListLoading extends ChatListState {}
 class SearchListLoaded extends ChatListState{
   final List<Map<String,dynamic>> users;
   const SearchListLoaded({required this.users});

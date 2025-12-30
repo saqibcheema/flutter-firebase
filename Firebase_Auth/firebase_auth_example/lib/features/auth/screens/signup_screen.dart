@@ -108,6 +108,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                   password: _passwordController.text.trim(),
                                 ),
                               );
+                              _passwordController.clear();
+                              _emailController.clear();
                             }
                           },
                           style: ElevatedButton.styleFrom(

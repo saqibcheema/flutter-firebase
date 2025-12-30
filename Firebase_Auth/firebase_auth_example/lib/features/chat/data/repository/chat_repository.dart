@@ -16,7 +16,7 @@ class ChatRepository {
         .collection(FirebaseKeyWords.userRooms)
         .doc(chatRoomId)
         .collection(FirebaseKeyWords.messages)
-        .orderBy('timestamp', descending: true)
+        .orderBy('timestamp', descending: false)
         .snapshots()
         .map((snapshot){
           return snapshot.docs.map((docs)=> MessageModel.fromMap(docs.data())).toList();

@@ -12,19 +12,16 @@ class ChatListRepository {
     : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
       _fireStore = fireStore ?? FirebaseFirestore.instance;
 
+
   Future<List<Map<String, dynamic>>> searchQuery(String query) async {
-    final lowerCaseQuery = query.toLowerCase();
+    final searchTerm = query.toLowerCase().trim();
 
     try {
       final snapshot = await _fireStore
           .collection(FirebaseKeyWords.users)
           .where(
-            FirebaseKeyWords.searchUsers,
-            isGreaterThanOrEqualTo: lowerCaseQuery,
-          )
-          .where(
-            FirebaseKeyWords.searchUsers,
-            isLessThan: '$lowerCaseQuery \uf8ff',
+          'searchKeywords',
+        arrayContains:searchTerm
           )
           .get();
 
@@ -37,5 +34,27 @@ class ChatListRepository {
     } catch (e) {
       throw ServerFailure();
     }
+  }
+
+  Future<Map<String,dynamic>?> getUserInfoById(String userId) async{
+    try{
+      final doc = await _fireStore.collection(FirebaseKeyWords.users).doc(userId).get();
+      if(doc.exists){
+        return doc.data();
+      }
+      return null;
+    }catch(e){
+      throw ServerFailure();
+    }
+  }
+
+  Stream<QuerySnapshot> getChatRooms() {
+    final String currentUid = FirebaseAuth.instance.currentUser!.uid;
+
+    return _fireStore
+        .collection(FirebaseKeyWords.userRooms)
+        .where('participants', arrayContains: currentUid)
+        .orderBy('lastMessageTime', descending: true)
+        .snapshots();
   }
 }

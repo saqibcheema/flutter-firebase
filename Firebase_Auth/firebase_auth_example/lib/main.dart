@@ -7,7 +7,7 @@ import 'features/auth/logic/auth_bloc.dart';
 import 'features/chat/data/repository/chat_repository.dart';
 import 'features/chat/logic/chat_bloc.dart';
 import 'features/chat_list/data/chatList_repository.dart';
-import 'features/chat_list/logic/chatlist_bloc.dart';
+import 'features/chat_list/logic/bloc/chatlist/chatlist_bloc.dart';
 import 'firebase_options.dart';
 
 void main() async {

@@ -97,6 +97,28 @@ class AuthRepository {
     }
   }
 
+  List<String> generateSearchKeywords(String name) {
+    List<String> keywords = [];
+    String temp = "";
+    name = name.toLowerCase();
+
+    for (int i = 0; i < name.length; i++) {
+      temp = temp + name[i];
+      keywords.add(temp);
+    }
+
+    var parts = name.split(" ");
+    if (parts.length > 1) {
+      String secondPart = "";
+      for (int i = 0; i < parts[1].length; i++) {
+        secondPart = secondPart + parts[1][i];
+        keywords.add(secondPart);
+      }
+    }
+
+    return keywords;
+  }
+
   Future<void> saveUserToFireStore(User user,{String? displayName})async{
     final userDoc = _fireStore.collection("Users").doc(user.uid);
     
@@ -109,6 +131,7 @@ class AuthRepository {
         "email" : user.email,
         "displayName" : displayName ?? user.displayName ?? generatedUserName,
         "searchName" : (displayName ?? user.displayName ?? generatedUserName).toLowerCase(),
+        "searchKeywords" : generateSearchKeywords(displayName ?? user.displayName ?? generatedUserName),
         "createdAt" : FieldValue.serverTimestamp(),
         "profilePhoto" : user.photoURL ?? "https://placeholder.com/user_avatar.png"
       });
