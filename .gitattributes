@@ -1,0 +1,19 @@
+# Platform directories ko generated mark karo
+**/android/** linguist-generated
+**/ios/** linguist-generated
+**/web/** linguist-generated
+**/windows/** linguist-generated
+**/linux/** linguist-generated
+**/macos/** linguist-generated
+
+# Dart ko priority do
+*.dart linguist-language=Dart
+
+# Baqi languages ko vendored mark karo
+**/*.cpp linguist-vendored
+**/*.h linguist-vendored
+**/*.html linguist-vendored
+**/*.c linguist-vendored
+**/*.java linguist-vendored
+**/*.swift linguist-vendored
+**/*.kt linguist-vendored
